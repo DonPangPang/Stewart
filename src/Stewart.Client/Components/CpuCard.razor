@@ -1,0 +1,17 @@
+﻿@using Stewart.Shared
+
+<MCard Width="200" Height="200">
+    <MCardTitle>CPU</MCardTitle>
+    <MCardText>
+        <div class="text-center">
+            <MProgressCircular Value="Cpu.CpuPercentage" Size="100" Width="15" Rotate="270" Color="teal">@($"{Cpu.CpuPercentage}%")</MProgressCircular>
+        </div>
+    </MCardText>
+</MCard>
+
+@code {
+
+    [Parameter]
+    public VCpuInfo Cpu { get; set; } = new();
+
+}

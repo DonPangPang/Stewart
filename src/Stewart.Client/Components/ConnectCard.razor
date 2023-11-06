@@ -1,0 +1,28 @@
+﻿@using Stewart.Shared
+
+<MChip Class="ma-2"
+       Color="grey lighten-3"
+       Label>
+    @Cpu.Platform
+    <MIcon Color="@ConnectColor" Right>
+        mdi mdi-link-variant
+    </MIcon>
+</MChip>
+
+@code {
+
+    [Parameter]
+    public VCpuInfo Cpu { get; set; } = new();
+
+    [Parameter]
+    public bool IsConnect { get; set; } = false;
+
+    public string ConnectColor => IsConnect ? "green" : "red";
+
+
+    protected override Task OnInitializedAsync()
+    {
+        return base.OnInitializedAsync();
+    }
+
+}

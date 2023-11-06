@@ -1,0 +1,86 @@
+﻿@page "/"
+@using Microsoft.AspNetCore.SignalR.Client
+@using Stewart.Shared
+@inject NavigationManager Navigation
+
+<PageTitle>Index</PageTitle>
+
+<div>
+    <ConnectCard Cpu="ServerInfo.CpuInfo" IsConnect="IsConnected"></ConnectCard>
+</div>
+
+<MRow id="st-bord">
+    <div>
+        <CpuCard Cpu="ServerInfo.CpuInfo"></CpuCard>
+    </div>
+    <div>
+        <MemoryCard Memory="ServerInfo.MemoryInfo"></MemoryCard>
+    </div>
+    <div>
+        <NetworkCard Network="ServerInfo.NetWorkInfo"></NetworkCard>
+    </div>
+</MRow>
+
+<MRow>
+    <MCol>
+        <MCard>
+            <MCardTitle>进程</MCardTitle>
+            <MCardText>
+                <MContainer class="st-container"></MContainer>
+            </MCardText>
+        </MCard>
+    </MCol>
+    <MCol>
+        <MCard>
+            <MCardTitle>文件</MCardTitle>
+            <MCardText>
+                <MContainer class="st-container"></MContainer>
+            </MCardText>
+        </MCard>
+    </MCol>
+</MRow>
+
+<style>
+    #st-bord{
+        
+    }
+    #st-bord > div{
+        margin-top: 20px;
+        margin-left: 20px;
+    }
+
+    .st-container{
+        min-height: 500px;
+        background-color: #EEEEEE;
+    }
+</style>
+
+@code{
+
+    private HubConnection? _hubConnection;
+    private ServerInfo ServerInfo { get; set; } = new();
+
+    public bool IsConnected =>
+        _hubConnection?.State == HubConnectionState.Connected;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine(Navigation.ToAbsoluteUri(GlobalVars.SystemInfoHub));
+        _hubConnection = new HubConnectionBuilder()
+            .WithUrl(Navigation.ToAbsoluteUri(GlobalVars.SystemInfoHub))
+            .AddMessagePackProtocol()
+            .Build();
+
+
+        _hubConnection.On<string, ServerInfo>("ReceiveMessage", (user, message) =>
+        {
+            //var encodedMsg = $"{user}: {message}";
+            ServerInfo = message;
+            Console.WriteLine($"cpu:{message.CpuInfo?.CpuPercentage}%");
+            StateHasChanged();
+        });
+
+        await _hubConnection.StartAsync();
+    }
+
+}

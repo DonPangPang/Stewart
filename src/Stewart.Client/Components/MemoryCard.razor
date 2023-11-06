@@ -1,0 +1,41 @@
+﻿@using Stewart.Shared
+@using Stewart.Shared.Extensions
+
+@* <MCard Width="400" Height="200">
+    <MCardTitle>Memory</MCardTitle>
+    <MCardText>
+        <MRow NoGutters>
+            <MCol class="text-center">
+                <MProgressCircular Value="Memory.UsedPercentage" Size="100" Width="15" Rotate="270" Color="teal">@($"{Memory.UsedPercentage}%")</MProgressCircular>
+            </MCol>
+            <MCol>
+                <MProgressCircular Value="Memory.UsedVirtualPercentage" Size="100" Width="15" Rotate="270" Color="teal">@($"{Memory.UsedVirtualPercentage}%")</MProgressCircular>
+            </MCol>
+        </MRow>
+    </MCardText>
+</MCard> *@
+
+<MCard Width="400" Height="200">
+    <MCardTitle>Memory</MCardTitle>
+    <MCardText>
+        <MRow NoGutters>
+            <MCol class="text-center">
+                <MProgressCircular Value="Memory.UsedPercentage" Size="100" Width="15" Rotate="270" Color="teal">@($"{Memory.UsedPercentage}%")</MProgressCircular>
+            </MCol>
+            <MCol>
+                <MDescriptions Column="1">
+                        <MDescriptionsItem Label="总内存" Span="1">@($"{Memory.TotalPhysicalMemory.GetValue()}GB")</MDescriptionsItem>
+                        <MDescriptionsItem Label="已用内存" Span="1">@($"{Memory.UsedPhysicalMemory.GetValue()}GB")</MDescriptionsItem>
+                        <MDescriptionsItem Label="可用内存" Span="1">@($"{Memory.AvailablePhysicalMemory.GetValue()}GB")</MDescriptionsItem>
+                </MDescriptions>
+            </MCol>
+        </MRow>
+    </MCardText>
+</MCard>
+
+@code {
+
+    [Parameter]
+    public VMemoryInfo Memory { get; set; } = new();
+
+}

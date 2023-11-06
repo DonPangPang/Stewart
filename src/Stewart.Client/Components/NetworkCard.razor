@@ -1,0 +1,21 @@
+﻿@using Stewart.Shared
+<MCard Height="200" Width="800">
+    <MCardTitle>Network</MCardTitle>
+    <MCardText>
+        <MDescriptions>
+            <MDescriptionsItem Label="Name">@Network.Name</MDescriptionsItem>
+            <MDescriptionsItem Label="Speed">@Network.Speed</MDescriptionsItem>
+            <MDescriptionsItem Label="Dns">@Network.Dns</MDescriptionsItem>
+            <MDescriptionsItem Label="Up">@Network.Up</MDescriptionsItem>
+            <MDescriptionsItem Label="Down">@Network.Down</MDescriptionsItem>
+            <MDescriptionsItem Label="NetworkType">@($"{Network.NetworkType}")</MDescriptionsItem>
+            <MDescriptionsItem Label="Mac">@Network.Mac</MDescriptionsItem>
+            <MDescriptionsItem Label="Trademark">@Network.Trademark</MDescriptionsItem>
+        </MDescriptions>
+    </MCardText>
+</MCard>
+
+@code {
+    [Parameter] 
+    public VNetWorkInfo Network { get; set; } = new();
+}
