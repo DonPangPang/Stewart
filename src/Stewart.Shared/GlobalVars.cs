@@ -21,6 +21,7 @@ public class ServerInfo
     public VMemoryInfo MemoryInfo { get; set; } = new();
     public VNetWorkInfo NetWorkInfo { get; set; } = new();
     public VPlatformInfo PlatformInfo { get; set; } = new();
+    public VProcessInfo ProcessInfo { get; set; } = new();
 }
 
 public class VCpuInfo
@@ -131,5 +132,11 @@ public class VPlatformInfo
 
 public class VProcessInfo
 {
-    private Dictionary<int, string> ProcessInfo { get; set; } = new();
+    public List<ProcessInfo> ProcessInfos { get; set; } = new();
+}
+
+public class ProcessInfo
+{
+    public int Pid { get; set; }
+    public string Name { get; set; } = string.Empty;
 }

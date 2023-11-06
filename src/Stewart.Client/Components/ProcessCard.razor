@@ -1,0 +1,53 @@
+﻿@using Stewart.Shared
+<MCard>
+    <MCardTitle>进程
+        <MSpacer></MSpacer>
+        <MTextField @bind-Value="_search"
+                    AppendIcon="mdi-magnify"
+                    Label="Search"
+                    SingleLine
+                     HideDetails="true"></MTextField>
+    </MCardTitle>
+    <MDataTable Headers="_headers"
+                Items="Info.ProcessInfos"
+                ItemsPerPage="25"
+                Class="elevation-1" Dense
+                Search="@_search">
+        <ItemColContent>
+            @if (context.Header.Value == "actions")
+            {
+                <TipIcon Text="杀死进程" OnClick="async ()=> await KillProcess(context.Item)"></TipIcon>
+            }
+            else
+            {
+                @context.Value
+            }
+        </ItemColContent>
+    </MDataTable>
+</MCard>
+
+@code {
+
+    [Parameter] 
+    public VProcessInfo Info { get; set; } = new();
+
+    string _search = "";
+
+    private readonly List<DataTableHeader<ProcessInfo>> _headers = new List<DataTableHeader<ProcessInfo>>
+        {
+           new ()
+           {
+            Text= "进程Pid",
+            Align= DataTableHeaderAlign.Start,
+            Sortable= false,
+            Value= nameof(ProcessInfo.Pid)
+          },
+          new (){ Text= "进程名称", Value= nameof(ProcessInfo.Name), Sortable= false,},
+          new (){ Text= "操作", Value= "actions",Sortable=false,Width="100px",Align=DataTableHeaderAlign.Center, }
+        };
+
+    async Task KillProcess(ProcessInfo process)
+    {
+        Console.WriteLine(process.Pid);
+    }
+}

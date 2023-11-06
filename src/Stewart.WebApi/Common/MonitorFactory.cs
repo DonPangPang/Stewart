@@ -1,4 +1,5 @@
-﻿using CZGL.SystemInfo.Linux;
+﻿using System.Diagnostics;
+using CZGL.SystemInfo.Linux;
 using CZGL.SystemInfo;
 using System.Net.NetworkInformation;
 using Stewart.Shared;
@@ -79,6 +80,12 @@ public interface ISystemInfoService
     public VNetWorkInfo GetNetWorkInfo();
 
     public VPlatformInfo GetPlatformInfo();
+
+    public VProcessInfo GetProcessInfo();
+
+    public void KillProcessByName(string name);
+
+    public void KillProcessById(int id);
 }
 
 public class WindowsSystemInfoService : ISystemInfoService
@@ -148,6 +155,31 @@ public class WindowsSystemInfoService : ISystemInfoService
             OSArchitecture = SystemPlatformInfo.OSArchitecture,
             OSPlatformID = SystemPlatformInfo.OSPlatformID
         };
+    }
+
+    public VProcessInfo GetProcessInfo()
+    {
+        var processes = Process.GetProcesses();
+
+        return new VProcessInfo()
+        {
+            ProcessInfos = processes.Select(x => new ProcessInfo() { Pid = x.Id, Name = x.ProcessName }).ToList()
+        };
+    }
+
+    public void KillProcessByName(string name)
+    {
+        var process = Process.GetProcessesByName(name);
+        foreach (var item in process)
+        {
+            item.Kill();
+        }
+    }
+
+    public void KillProcessById(int id)
+    {
+        var process = Process.GetProcessById(id);
+        process.Kill();
     }
 }
 
@@ -238,5 +270,55 @@ public class UnixSystemInfoService : ISystemInfoService
             };
         }
         catch { return new VPlatformInfo(); }
+    }
+
+    public VProcessInfo GetProcessInfo()
+    {
+        Process process = new Process();
+        process.StartInfo.FileName = "/bin/bash";
+        process.StartInfo.Arguments = "-c \"ps aux | awk '{print $11}'\"";
+        process.StartInfo.UseShellExecute = false;
+        process.StartInfo.RedirectStandardOutput = true;
+        process.Start();
+
+        string output = process.StandardOutput.ReadToEnd();
+        process.WaitForExit();
+
+        List<ProcessInfo> infos = new();
+
+        foreach (string line in output.Split('\n'))
+        {
+            string[] parts = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length >= 2)
+            {
+                Int32.TryParse(parts[1], out var processId);
+                string processName = parts[10];
+                infos.Add(new ProcessInfo()
+                {
+                    Pid = processId,
+                    Name = processName
+                });
+            }
+        }
+
+        return new VProcessInfo()
+        {
+            ProcessInfos = infos
+        };
+    }
+
+    public void KillProcessByName(string name)
+    {
+        var process = Process.GetProcessesByName(name);
+        foreach (var item in process)
+        {
+            item.Kill();
+        }
+    }
+
+    public void KillProcessById(int id)
+    {
+        var process = Process.GetProcessById(id);
+        process.Kill();
     }
 }

@@ -21,23 +21,18 @@
     </div>
 </MRow>
 
-<MRow>
-    <MCol>
-        <MCard>
-            <MCardTitle>进程</MCardTitle>
-            <MCardText>
-                <MContainer class="st-container"></MContainer>
-            </MCardText>
-        </MCard>
-    </MCol>
-    <MCol>
+<MRow id="st-container">
+    <div>
+        <ProcessCard Info="ServerInfo.ProcessInfo"></ProcessCard>
+    </div>
+    <div>
         <MCard>
             <MCardTitle>文件</MCardTitle>
             <MCardText>
                 <MContainer class="st-container"></MContainer>
             </MCardText>
         </MCard>
-    </MCol>
+    </div>
 </MRow>
 
 <style>
@@ -49,10 +44,16 @@
         margin-left: 20px;
     }
 
-    .st-container{
-        min-height: 500px;
-        background-color: #EEEEEE;
+    #st-container{
+        /* margin-top: 20px; */
     }
+
+    #st-container > div{
+        margin-top: 20px;
+        margin-left: 20px;
+        min-width: 40%;
+    }
+        
 </style>
 
 @code{
@@ -76,7 +77,7 @@
         {
             //var encodedMsg = $"{user}: {message}";
             ServerInfo = message;
-            Console.WriteLine($"cpu:{message.CpuInfo?.CpuPercentage}%");
+            // Console.WriteLine($"cpu:{message.CpuInfo?.CpuPercentage}%");
             StateHasChanged();
         });
 

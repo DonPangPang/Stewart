@@ -32,7 +32,8 @@ public class SystemInfoBackgroundService : BackgroundService
                         CpuInfo = service.GetCpuInfo(),
                         MemoryInfo = service.GetMemoryInfo(),
                         NetWorkInfo = service.GetNetWorkInfo(),
-                        PlatformInfo = service.GetPlatformInfo()
+                        PlatformInfo = service.GetPlatformInfo(),
+                        ProcessInfo = service.GetProcessInfo(),
                     };
 
                     await _hubContext.Clients.All.ReceiveMessage("notify", info);

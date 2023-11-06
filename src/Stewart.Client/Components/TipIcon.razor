@@ -1,0 +1,21 @@
+﻿<MTooltip Top>
+    <ActivatorContent>
+        <MIcon Small
+               Class="mr-2"
+               OnClick="OnClick"
+               Color="red"
+               @attributes="@context.Attrs">mdi-link-variant-off</MIcon>
+    </ActivatorContent>
+    <ChildContent>
+        <span>@Text</span>
+    </ChildContent>
+</MTooltip>
+
+@code {
+
+    [Parameter]
+    public string Text { get; set; } = string.Empty;
+
+    [Parameter]
+    public EventCallback OnClick { get; set; }
+}
