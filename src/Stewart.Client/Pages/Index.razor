@@ -1,7 +1,9 @@
 ﻿@page "/"
 @using Microsoft.AspNetCore.SignalR.Client
+@using Stewart.Client.Services
 @using Stewart.Shared
 @inject NavigationManager Navigation
+@inject ProcessService ProcessService
 
 <PageTitle>Index</PageTitle>
 
@@ -26,12 +28,7 @@
         <ProcessCard Info="ServerInfo.ProcessInfo"></ProcessCard>
     </div>
     <div>
-        <MCard>
-            <MCardTitle>文件</MCardTitle>
-            <MCardText>
-                <MContainer class="st-container"></MContainer>
-            </MCardText>
-        </MCard>
+        <DirectoryCard></DirectoryCard>
     </div>
 </MRow>
 

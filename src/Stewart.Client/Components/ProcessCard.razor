@@ -1,4 +1,8 @@
 ﻿@using Stewart.Shared
+@using Stewart.Client.Services
+@inject ProcessService ProcessService
+@inject IPopupService PopupService
+
 <MCard>
     <MCardTitle>进程
         <MSpacer></MSpacer>
@@ -48,6 +52,13 @@
 
     async Task KillProcess(ProcessInfo process)
     {
-        Console.WriteLine(process.Pid);
+        if (await ProcessService.KillProcessAsync(process.Pid))
+        {
+            await PopupService.EnqueueSnackbarAsync("吓死进程成功", AlertTypes.Success);
+        }
+        else
+        {
+            await PopupService.EnqueueSnackbarAsync("吓死进程失败", AlertTypes.Warning);
+        }
     }
 }
